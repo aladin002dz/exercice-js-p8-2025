@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
-    <title>Page sans Accessibilité</title>
+    <title>Page avec Accessibilité</title>
 </head>
+
 <body>
-<h1>Titre de la Page</h1>
-<p>Ceci est un paragraphe de texte.</p>
+    <h1>Titre de la Page</h1>
+    <p>Ceci est un paragraphe de texte.</p>
 
-<!-- Formulaire sans étiquette pour les champs -->
-<form>
-    <input id="name" type="text" placeholder="Entrez votre nom">
-    <input id="email" type="email" placeholder="Entrez votre adresse e-mail">
-    <button type="submit">Envoyer</button>
-</form>
+    <!-- Formulaire avec étiquettes pour les champs -->
+    <form>
+        <label for="name">Nom :</label>
+        <input id="name" type="text" placeholder="Entrez votre nom" aria-describedby="name-help">
+        <div id="name-help">Veuillez entrer votre nom complet</div>
 
-<!-- Image sans attribut alt -->
-<img src="assets/image.png" height=250>
+        <label for="email">Adresse e-mail :</label>
+        <input id="email" type="email" placeholder="Entrez votre adresse e-mail" aria-describedby="email-help">
+        <div id="email-help">Veuillez entrer une adresse e-mail valide</div>
 
-<!-- Lien sans texte descriptif -->
-<a href="#">Cliquez ici</a>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <!-- Image avec attribut alt descriptif -->
+    <img src="assets/image.png" height="250" alt="Description de l'image" width="auto">
+
+    <!-- Lien avec texte descriptif -->
+    <a href="#" aria-label="Lien vers la page d'accueil">Retour à l'accueil</a>
 </body>
+
 </html>
