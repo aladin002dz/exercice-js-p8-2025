@@ -2,26 +2,35 @@
 
 /**
  * Fonction calculatrice qui effectue des opérations mathématiques
- * @param {number} num1 - Premier nombre
- * @param {number} num2 - Deuxième nombre
+ * @param {number|string} num1 - Premier nombre (peut être un nombre ou une chaîne)
+ * @param {number|string} num2 - Deuxième nombre (peut être un nombre ou une chaîne)
  * @param {string} operator - Opérateur mathématique (+, -, *, /)
  * @returns {number|string} - Résultat de l'opération ou message d'erreur
  */
 function calculate(num1, num2, operator) {
+    // Convertir les entrées en nombres (gère les chaînes de caractères)
+    const number1 = Number(num1);
+    const number2 = Number(num2);
+
+    // Vérifier que les conversions sont valides
+    if (isNaN(number1) || isNaN(number2)) {
+        return "Invalid numbers";
+    }
+
     // Utiliser un switch pour gérer les différents opérateurs
     switch (operator) {
         case '+':
-            return num1 + num2; // Addition
+            return number1 + number2; // Addition
         case '-':
-            return num1 - num2; // Soustraction
+            return number1 - number2; // Soustraction
         case '*':
-            return num1 * num2; // Multiplication
+            return number1 * number2; // Multiplication
         case '/':
             // Vérifier la division par zéro
-            if (num2 === 0) {
+            if (number2 === 0) {
                 return "Division by zero is not allowed";
             }
-            return num1 / num2; // Division
+            return number1 / number2; // Division
         default:
             // Opérateur non reconnu
             return "Invalid operator";

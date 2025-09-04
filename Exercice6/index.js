@@ -69,8 +69,13 @@ function calculateResult() {
         case '/':
             // Vérifier la division par zéro
             if (secondNumber === 0) {
-                alert('Division par zéro impossible !');
-                clearDisplay(); // Réinitialiser la calculatrice
+                // Afficher le message d'erreur dans le display au lieu d'un alert
+                document.getElementById('display').value = 'Division by zero is not allowed';
+                displayValue = 'Division by zero is not allowed';
+                // Réinitialiser les variables pour la prochaine opération
+                firstNumber = null;
+                operator = null;
+                waitingForSecondNumber = false;
                 return;
             }
             result = firstNumber / secondNumber; // Division
@@ -89,32 +94,47 @@ function calculateResult() {
     waitingForSecondNumber = false; // Plus d'attente
 }
 
-// Gestionnaire d'événements pour les boutons d'opération
+/**
+ * Fonction pour gérer les clics sur les boutons
+ * @param {string} value - Valeur du bouton cliqué
+ */
+function handleButtonClick(value) {
+    if (value === 'C') {
+        // Bouton Clear
+        clearDisplay();
+    } else if (value === '=') {
+        // Bouton égal - calculer le résultat
+        calculateResult();
+    } else if (isOperator(value)) {
+        // Bouton opérateur
+        if (displayValue !== '' && firstNumber === null) {
+            // Premier cas : on a un nombre et on sélectionne un opérateur
+            firstNumber = parseFloat(displayValue);
+            operator = value;
+            waitingForSecondNumber = true;
+        } else if (firstNumber !== null && operator !== null && !waitingForSecondNumber) {
+            // Deuxième cas : on a déjà une opération en cours
+            calculateResult();
+            firstNumber = parseFloat(displayValue);
+            operator = value;
+            waitingForSecondNumber = true;
+        }
+    } else {
+        // Bouton chiffre
+        appendToDisplay(value);
+    }
+}
+
+// Gestionnaire d'événements principal
 document.addEventListener('DOMContentLoaded', function () {
-    // Sélectionner tous les boutons qui ont un onclick avec appendToDisplay
-    const operatorButtons = document.querySelectorAll('button[onclick*="appendToDisplay"]');
+    // Sélectionner tous les boutons de la calculatrice
+    const buttons = document.querySelectorAll('.calculator button');
 
     // Ajouter un gestionnaire d'événements à chaque bouton
-    operatorButtons.forEach(button => {
+    buttons.forEach(button => {
         button.addEventListener('click', function () {
-            const value = this.textContent; // Récupérer le texte du bouton
-
-            // Si c'est un opérateur, gérer la logique de la calculatrice
-            if (isOperator(value)) {
-                // Premier cas : on a un nombre et on sélectionne un opérateur
-                if (displayValue !== '' && firstNumber === null) {
-                    firstNumber = parseFloat(displayValue); // Stocker le premier nombre
-                    operator = value;                       // Stocker l'opérateur
-                    waitingForSecondNumber = true;          // Attendre le deuxième nombre
-                }
-                // Deuxième cas : on a déjà une opération en cours
-                else if (firstNumber !== null && operator !== null && !waitingForSecondNumber) {
-                    calculateResult();                      // Calculer le résultat actuel
-                    firstNumber = parseFloat(displayValue); // Utiliser le résultat comme premier nombre
-                    operator = value;                       // Stocker le nouvel opérateur
-                    waitingForSecondNumber = true;          // Attendre le deuxième nombre
-                }
-            }
+            const value = this.getAttribute('data-value'); // Récupérer la valeur du bouton
+            handleButtonClick(value); // Traiter le clic
         });
     });
 });

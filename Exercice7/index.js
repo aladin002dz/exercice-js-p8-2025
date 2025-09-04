@@ -11,7 +11,8 @@ function convertToBinary() {
 
     // Validation de l'entrée : vérifier si le champ n'est pas vide et si c'est un nombre valide
     if (decimalInput === '' || isNaN(decimalInput)) {
-        resultElement.textContent = 'Veuillez entrer un nombre valide';
+        // Ne rien afficher dans le résultat pour les entrées invalides
+        resultElement.textContent = '';
         return; // Sortir de la fonction si l'entrée n'est pas valide
     }
 
